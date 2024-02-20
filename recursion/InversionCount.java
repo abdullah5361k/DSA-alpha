@@ -1,20 +1,22 @@
 package DSA.recursion;
 
-public class MergeSort {
+public class InversionCount {
 
-    public static void merge(int arr[], int si, int ei) {
+    public static int mergeSort(int arr[], int si, int ei) {
+        int c = 0;
         if (si >= ei) {
-            return;
+            return c;
         }
 
         int mid = si + (ei - si) / 2;
-        merge(arr, si, mid);
-        merge(arr, mid + 1, ei);
-        sort(arr, si, ei, mid);
-
+        c += mergeSort(arr, si, mid);
+        c += mergeSort(arr, mid + 1, ei);
+        c += merge(arr, si, ei, mid);
+        return c;
     }
 
-    public static void sort(int arr[], int si, int ei, int mid) {
+    public static int merge(int arr[], int si, int ei, int mid) {
+        int count = 0;
         int temp[] = new int[ei - si + 1];
         int i = si;
         int j = mid + 1;
@@ -25,6 +27,7 @@ public class MergeSort {
                 temp[k] = arr[i];
                 i++;
             } else {
+                count += mid - i + 1;
                 temp[k] = arr[j];
                 j++;
             }
@@ -43,17 +46,13 @@ public class MergeSort {
             arr[i] = temp[k];
         }
 
-    }
+        return count;
 
-    public static void printArray(int arr[]) {
-        for (int i = 0; i < arr.length; i++) {
-            System.out.print(arr[i] + " ");
-        }
     }
 
     public static void main(String[] args) {
-        int arr[] = { 6, 3, 9, 5, 2, 8 };
-        merge(arr, 0, arr.length - 1);
-        printArray(arr);
+        // int arr[] = { 2, 4, 1, 3, 5 };
+        int arr[] = { 5, 3, 2, 4, 1 };
+        System.out.println(mergeSort(arr, 0, arr.length - 1));
     }
 }
