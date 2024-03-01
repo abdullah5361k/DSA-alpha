@@ -12,13 +12,13 @@ public class Q_4 {
             if (end != 0 && str.charAt(start) == str.charAt(end - 1)) {
                 count++;
             }
-            // System.out.print(str.substring(start, end) + " ");
+            System.out.print(str.substring(start, end) + " ");
             subString(str, start, end + 1);
         }
 
     }
 
     public static void main(String[] args) {
-        System.out.print(subString("aba", 0, 0));
+        subString("aba", 0, 0);
     }
 }

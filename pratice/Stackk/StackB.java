@@ -4,54 +4,34 @@ import java.util.*;
 
 public class StackB {
 
-    public static class Node {
-        int data;
-        Node next;
-
-        Node(int data) {
-            this.data = data;
-        }
-    }
-
-    public static class Stack {
-        static Node head = null;
-
-        public static boolean isEmpety() {
-            return head == null;
-        }
-
-        public static void push(int data) {
-            Node newNode = new Node(data);
-            if (isEmpety()) {
-                head = newNode;
-                return;
+    public static void postFix(String str) {
+        Stack<Integer> st = new Stack<>();
+        for (int i = 0; i < str.length(); i++) {
+            char ch = str.charAt(i);
+            if (ch == '+' || ch == '-' || ch == '/' || ch == '*') {
+                int val2 = st.pop();
+                int val1 = st.pop();
+                if (ch == '+')
+                    st.push(val1 + val2);
+                if (ch == '-')
+                    st.push(val1 - val2);
+                if (ch == '*')
+                    st.push(val1 * val2);
+                if (ch == '/')
+                    st.push(val1 / val2);
+            } else {
+                int asscii = (int) ch;
+                st.push(asscii - 48);
             }
-            newNode.next = head;
-            head = newNode;
         }
 
-        public static int pop() {
-            if (isEmpety()) {
-                return -1;
-            }
-            int top = head.data;
-            head = head.next;
-            return top;
-        }
-
-        public static int peek() {
-            return head.data;
-        }
+        System.out.println(st);
 
     }
 
     public static void main(String[] args) {
-        Stack.push(1);
-        Stack.push(2);
-        Stack.push(3);
-        while (!Stack.isEmpety()) {
-            System.out.println(Stack.peek());
-            Stack.pop();
-        }
+        String str = "953+4*6/-";
+        postFix(str);
+
     }
 }

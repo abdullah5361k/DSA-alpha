@@ -1,4 +1,4 @@
-package DSA.assignments.assignment_6;
+package DSA.assignments.assignment_7;
 
 public class RatInMaze {
 
