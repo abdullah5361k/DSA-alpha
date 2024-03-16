@@ -396,15 +396,239 @@ public class BT {
 
     }
 
+    public static void kthLevel(Node root, int k, int level) {
+        if (root == null)
+            return;
+
+        if (level == k) {
+            System.out.print(root.data + " ");
+            return;
+        }
+
+        kthLevel(root.left, k, level + 1);
+        kthLevel(root.right, k, level + 1);
+
+    }
+
+    public static boolean getPath(Node root, int n, ArrayList<Integer> list1) {
+        if (root == null)
+            return false;
+
+        list1.add(root.data);
+        if (root.data == n)
+            return true;
+
+        boolean left = getPath(root.left, n, list1);
+        boolean right = getPath(root.right, n, list1);
+
+        if (left == false && right == false)
+            list1.remove(list1.size() - 1);
+
+        if (left || right)
+            return true;
+
+        return false;
+    }
+
+    public static void lca(Node root, int n1, int n2) {
+        ArrayList<Integer> list1 = new ArrayList<>();
+        ArrayList<Integer> list2 = new ArrayList<>();
+        getPath(root, n1, list1);
+        getPath(root, n2, list2);
+
+        int i = 0;
+        for (; i < list1.size(); i++) {
+            if (list1.get(i) != list2.get(i))
+                break;
+        }
+
+        System.out.println(list1.get(i - 1));
+
+    }
+
+    public static Node lca2(Node root, int n1, int n2) {
+        if (root == null)
+            return root;
+
+        if (root.data == n1 || root.data == n2)
+            return root;
+
+        Node left = lca2(root.left, n1, n2);
+        Node right = lca2(root.right, n1, n2);
+
+        if (left == null)
+            return right;
+
+        if (right == null)
+            return left;
+
+        return root;
+    }
+
+    public static int distance(Node root, int n) {
+        if (root == null)
+            return -1;
+
+        if (root.data == n)
+            return 0;
+
+        int left = distance(root.left, n);
+        int right = distance(root.right, n);
+
+        if (left == -1 && right == -1)
+            return -1;
+
+        if (left >= 0)
+            return left + 1;
+        return right + 1;
+    }
+
+    public static void minimunDistance(Node root, int n1, int n2) {
+        Node ancestor = lca2(root, n1, n2);
+        System.out.println(ancestor.data);
+        int dist1 = distance(ancestor, n1);
+        int dist2 = distance(ancestor, n2);
+        int d = dist1 + dist2;
+        System.out.println(d);
+    }
+
+    public static int kthAncestors(Node root, int node, int k) {
+        if (root == null)
+            return -1;
+
+        if (root.data == node)
+            return 0;
+
+        int left = kthAncestors(root.left, node, k);
+        int right = kthAncestors(root.right, node, k);
+
+        if (left == -1 && right == -1)
+            return -1;
+
+        int max = Math.max(left, right);
+        if (max + 1 == k)
+            System.out.println(root.data);
+        return max + 1;
+
+    }
+
+    public static int transform(Node root) {
+        if (root == null)
+            return 0;
+
+        int left = transform(root.left);
+        int right = transform(root.right);
+
+        int data = root.data;
+        root.data = left + right;
+
+        return data + left + right;
+
+    }
+
+    public static void print(Node root) {
+        if (root == null)
+            return;
+
+        System.out.print(root.data + " ");
+        print(root.left);
+        print(root.right);
+
+    }
+
+    public static int tree(Node root) {
+        if (root == null)
+            return 0;
+
+        if (root.left == null && root.right == null)
+            return 0;
+
+        tree(root.left);
+        tree(root.right);
+
+        if (root.right.data + root.left.data == root.data)
+            return 1;
+        return 0;
+    }
+
+    public static boolean uniValued(Node root) {
+        if (root == null)
+            return false;
+
+        if (root.left == null && root.right == null)
+            return true;
+
+        boolean left = uniValued(root.left);
+        boolean right = uniValued(root.right);
+
+        if (left && right) {
+            if (root.data == root.left.data && root.data == root.right.data)
+                return true;
+        }
+        if (root.right == null && root.data == root.left.data)
+            return true;
+        if (root.left == null && root.data == root.right.data)
+            return true;
+
+        return false;
+    }
+
+    public static Node invertTree(Node root) {
+        if (root == null)
+            return root;
+
+        invertTree(root.left);
+        invertTree(root.right);
+
+        if (root.left != null && root.right != null) {
+            Node t = root.left;
+            root.left = root.right;
+            root.right = t;
+        }
+
+        return root;
+
+    }
+
+    public static Node deleteLeaf(Node root, int x) {
+        if (root == null)
+            return null;
+
+        root.left = deleteLeaf(root.left, x);
+        root.right = deleteLeaf(root.right, x);
+
+        if (root.data == x && root.left == null && root.right == null)
+            return null;
+
+        return root;
+
+    }
+
+    public static Node insert(Node root, int val) { // input -> int values[] = { 8, 5, 3, 1, 4, 6, 10, 11, 14 };
+        if (root == null) {
+            return new Node(val);
+        }
+
+        if (root.data > val) {
+            root.left = insert(root.left, val);
+        } else {
+            root.right = insert(root.right, val);
+        }
+
+        return root;
+    }
+
     public static void main(String[] args) {
         // int node[] = { 1, 2, 4, -1, -1, 5, -1, -1, 3, -1, 6, -1, -1 };
         int node[] = { 1, 2, 3, 4, -1, -1, 5, -1, -1, -1, -1 };
-        Node root = new Node(10);
-        root.left = new Node(20);
-        root.left.left = new Node(40);
-        root.left.right = new Node(60);
-        root.right = new Node(30);
-        views(root);
+        Node root = new Node(6);
+        root.left = new Node(5);
+        root.right = new Node(4);
+        root.left.left = new Node(1);
+        root.left.right = new Node(2);
+        root.right.right = new Node(5);
+        System.out.println(deleteLeaf(root, 5).data);
+        preorderTraversal(root);
     }
 
 }
